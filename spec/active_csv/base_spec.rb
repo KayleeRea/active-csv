@@ -1,6 +1,7 @@
 require 'rspec'
 require 'active_csv/base'
 require 'csv'
+require 'active_csv/normalizer'
 
 describe ActiveCSV::Base do
 
@@ -38,6 +39,14 @@ describe ActiveCSV::Base do
       active_csv = ActiveCSV::Base.new(row)
 
       expect(active_csv.name).to eq nil
+    end
+  end
+
+  describe "normalize" do
+    it "normalizes the headers" do
+      instance = Normalizer.new(CSV::Row.new(["FIrst   NAme  "], ["Joe"]))
+
+      expect(instance.first_name).to eq "Joe"
     end
   end
 
