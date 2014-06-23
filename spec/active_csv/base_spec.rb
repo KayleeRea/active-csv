@@ -50,15 +50,24 @@ describe ActiveCSV::Base do
     end
   end
 
-  describe "respond_to_missing?" do
-    it "returns true" do
-      row = CSV::Row.new(["name", "age"], ["joe", nil])
+  describe "error" do
+    it "normalizes the headers" do
+      instance = Normalizer.new(CSV::Row.new(["FIrst   NAme  "], ["Joe"]))
 
-      active_csv = ActiveCSV::Base.new(row)
-
-      expect(active_csv.respond_to?(:name)).to eq true
-      expect(active_csv.respond_to?(:age)).to eq true
+      expect{instance.last_name}.to raise_error "Error, no last_name method"
     end
   end
+
+describe "respond_to_missing?" do
+  it "returns true" do
+    row = CSV::Row.new(["name", "age"], ["joe", nil])
+
+    active_csv = ActiveCSV::Base.new(row)
+
+    expect(active_csv.respond_to?(:name)).to eq true
+    expect(active_csv.respond_to?(:age)).to eq true
+    expect(active_csv.respond_to?(:last_name)).to eq false
+  end
+end
 
 end
